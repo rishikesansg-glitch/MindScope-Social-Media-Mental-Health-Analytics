@@ -1,0 +1,35 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+
+posts = {
+    "text": [
+        "I feel stressed about exams",
+        "Today was a beautiful day",
+        "I feel anxious and lonely",
+        "I am motivated and productive"
+    ]
+}
+
+df = pd.DataFrame(posts)
+
+analyzer = SentimentIntensityAnalyzer()
+
+def detect_sentiment(text):
+    score = analyzer.polarity_scores(text)["compound"]
+
+    if score >= 0.05:
+        return "Positive"
+    elif score <= -0.05:
+        return "Negative"
+    else:
+        return "Neutral"
+
+df["sentiment"] = df["text"].apply(detect_sentiment)
+
+print(df)
+
+df["sentiment"].value_counts().plot(kind="bar")
+
+plt.title("Mental Health Sentiment Analysis")
+plt.show()
